@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scraper Interface</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input { width: 60%; padding: 8px; }
+    button { padding: 8px 12px; }
+    pre { background: #f4f4f4; padding: 10px; margin-top: 20px; max-height: 500px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <h1>Scraping de Productos</h1>
+  <input type="text" id="urlInput" placeholder="Pegá el link de la página a scrapear..." />
+  <button onclick="hacerScraping()">Scrapear</button>
+
+  <pre id="resultado"></pre>
+
+  <script>
+    async function hacerScraping() {
+      const url = document.getElementById('urlInput').value;
+      const resultadoBox = document.getElementById('resultado');
+      resultadoBox.textContent = 'Cargando...';
+
+      try {
+        const response = await fetch(`http://localhost:3000/scrape?url=${encodeURIComponent(url)}`);
+        if (!response.ok) throw new Error('Error en el servidor');
+
+        const data = await response.json();
+        resultadoBox.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        resultadoBox.textContent = 'Error: ' + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
+
